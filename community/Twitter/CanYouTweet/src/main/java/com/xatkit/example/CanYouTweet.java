@@ -202,20 +202,20 @@ public class CanYouTweet {
 		handleSearchTweets
 		        .body(context -> {
                     String contentQuery = (String) context.getIntent().getValue("query");
-	            	if(contentQuery != ""){
+	            	if(!contentQuery.equals("")){
 	            		String result = (String) twitterPlatform.lookForTweets(context,contentQuery);	
 	            		
-	            		if(result == "1"){
-	            			reactPlatform.Reply(context,"I couldn't do that search");
+	            		if(result.equals("1")){
+	            			reactPlatform.reply(context,"I couldn't do that search");
 	            		}else{
-	            			if(result == "0"){
-	            				reactPlatform.Reply(context,"No results for: _" + contentQuery + "_");
+	            			if(result.equals("0")){
+	            				reactPlatform.reply(context,"No results for: _" + contentQuery + "_");
 	            			}else{
-	            				reactPlatform.Reply(context,result);
+	            				reactPlatform.reply(context,result);
 	            			}
 	            		}		
 	            	}else{
-	            		reactPlatform.Reply(context,"I can't search for that");
+	            		reactPlatform.reply(context,"I can't search for that");
 	            	}		        	
                 })
 		        .next()
@@ -224,16 +224,16 @@ public class CanYouTweet {
 		handlePostTweet
 		        .body(context -> {
                     String content = (String) context.getIntent().getValue("content");
-	            	if(content != ""){
-	            		String result = (String) = twitterPlatform.postAtweet(context,content);
+	            	if(!content.equals("")){
+	            		String result = (String) twitterPlatform.postAtweet(context,content);
 	            		
-	            		if(result == 0){
-	            			reactPlatform.Reply(context,"I just tweeted: _" + content + "_ for you.");
+	            		if(result.equals("0")){
+	            			reactPlatform.reply(context,"I just tweeted: _" + content + "_ for you.");
 	            		}else{
-	            			reactPlatform.Reply(context,"I couldn't tweet that for you right now.");
+	            			reactPlatform.reply(context,"I couldn't tweet that for you right now.");
 	            		}		
 	            	}else{
-	            		reactPlatform.Reply(context,"I'm not going to post an empty tweet, look somewhere else");
+	            		reactPlatform.reply(context,"I'm not going to post an empty tweet, look somewhere else");
 	            	}
 	        	})
 			    .next()
@@ -242,11 +242,11 @@ public class CanYouTweet {
     	handleSendDM
 		        .body(context -> {
                     String user = (String) context.getIntent().getValue("user");
-		        	if(user != ""){
-		        		reactPlatform.Reply(context,"Ok, so you want to send a DM to *@" + user + "*");
-		        		reactPlatform.Reply(context,"Write 'DM content:' and then add what you want to say to him/her in double quotes.");
+		        	if(!user.equals("")){
+		        		reactPlatform.reply(context,"Ok, so you want to send a DM to *@" + user + "*");
+		        		reactPlatform.reply(context,"Write 'DM content:' and then add what you want to say to him/her in double quotes.");
 		        	}else{
-		        		reactPlatform.Reply(context,"I don't know anyone by that name");
+		        		reactPlatform.reply(context,"I don't know anyone by that name");
 		        	}
 		    	})
 			    .next()
@@ -255,15 +255,15 @@ public class CanYouTweet {
     	handleSpecifyDM
 		        .body(context -> {
                     String DMcontent = (String) context.getIntent().getValue("text");
-                	if(DMcontent != ""){
+                	if(!DMcontent.equals("")){
                 		String result = (String)twitterPlatform.sendDM(context,(String) context.getIntent().getValue("user"), DMcontent);
-                		if(result == 0){
-                			reactPlatform.Reply(context,"Message Sent! :smile:");
+                		if(result.equals(0)){
+                			reactPlatform.reply(context,"Message Sent! :smile:");
                 		}else{
-                			reactPlatform.Reply(context,"I couldn't send it :upside_down_face:");
+                			reactPlatform.reply(context,"I couldn't send it :upside_down_face:");
                 		}		
                 	}else{
-                		reactPlatform.Reply(context,"I'm not going to send that");
+                		reactPlatform.reply(context,"I'm not going to send that");
                 	}
 		    	})
 			    .next()
@@ -272,13 +272,13 @@ public class CanYouTweet {
 		handleReceiveDM
 		        .body(context -> {
 		        	String result = (String)twitterPlatform.receiveDM(context);
-                	if (result == "1"){
-                		reactPlatform.Reply(context,"I couldn't retrieve any message, try again later. :upside_down_face:");
+                	if (result.equals("1")){
+                		reactPlatform.reply(context,"I couldn't retrieve any message, try again later. :upside_down_face:");
                 	}else{
-                		if(result == "0"){
-                			reactPlatform.Reply(context,"There are no messages...");
+                		if(result.equals("0")){
+                			reactPlatform.reply(context,"There are no messages...");
                 		}else{
-                			reactPlatform.Reply(context,result);
+                			reactPlatform.reply(context,result);
                 		}
                 	}
 		    	})
@@ -303,12 +303,12 @@ public class CanYouTweet {
 		        		}
 		        	}
 		        	if (result == "1"){
-		        		reactPlatform.Reply(context,"An error occurred while trying to retrieve the ternding topics, try again later. :upside_down_face:")
+		        		reactPlatform.reply(context,"An error occurred while trying to retrieve the ternding topics, try again later. :upside_down_face:")
 		        	}else{
 		        		if(result == "0"){
-		        			reactPlatform.Reply(context,noResultsMessage)
+		        			reactPlatform.reply(context,noResultsMessage)
 		        		}else{
-		        			reactPlatform.Reply(context,result as java.util.List<com.github.seratch.jslack.api.model.Attachment>)	
+		        			reactPlatform.reply(context,result as java.util.List<com.github.seratch.jslack.api.model.Attachment>)	
 		        		}
 		        	}
 		    	*/})
@@ -316,7 +316,7 @@ public class CanYouTweet {
 			    .moveTo(awaitingInput);
 
 		val defaultFallback = fallbackState()
-                .body(context -> reactPlatform.Reply(context, "\"Sorry I'll have to check that on my dictionary and get back to you later :(\")"));
+                .body(context -> reactPlatform.reply(context, "\"Sorry I'll have to check that on my dictionary and get back to you later :(\")"));
         
         /*
          * Creates the bot model that will be executed by the Xatkit engine.
