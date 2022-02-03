@@ -19,6 +19,10 @@
 # Eclipse's .settings
 **/.settings
 
+# Eclipse's .project & classpath
+**/.classpath
+**/.project
+
 # IntelliJ settings
 **/.idea
 *.iml
